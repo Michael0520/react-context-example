@@ -1,12 +1,12 @@
 import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import { initState,UserContext } from "../context/UserContext";
 
 const UserMenu = () => {
   const { userData, setUserData } = useContext(UserContext);
 
   const signOut = () => {
-    setUserData(null);
+    setUserData(initState);
   };
   useEffect(() => {
     setUserData((prev) => ({
