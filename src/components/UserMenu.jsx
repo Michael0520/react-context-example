@@ -1,20 +1,26 @@
 import { useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { initState,UserContext } from "../context/UserContext";
+import { initState, UserContext } from "../context/UserContext";
+import { useAuthTokenState, useUserProfileState } from "../localStorage";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu = () => {
+  const navigate = useNavigate();
   const { userData, setUserData } = useContext(UserContext);
+  console.log(userData);
+  const [authToken, setAuthToken, removeAuthToken] = useAuthTokenState();
+  const [userProfile, setUserProfile, removeUserProfile] =
+    useUserProfileState();
 
   const signOut = () => {
+    // reset context data
     setUserData(initState);
+
+    // reset localStorage data
+    removeAuthToken();
+    removeUserProfile();
+    navigate("/");
   };
-  useEffect(() => {
-    setUserData((prev) => ({
-      ...prev,
-      title: "DashBoard Page",
-      iconPath: "https://picsum.photos/id/237/200/300",
-    }));
-  }, []);
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-slate-700 text-xl text-white">
@@ -34,13 +40,12 @@ const UserMenu = () => {
         />
       </div>
 
-      <NavLink
+      <div
         className="z-10 mt-5 rounded-full bg-pink-500 px-4 py-2 font-bold hover:bg-pink-400"
-        to="/"
         onClick={signOut}
       >
         Sigh Out
-      </NavLink>
+      </div>
     </div>
   );
 };
